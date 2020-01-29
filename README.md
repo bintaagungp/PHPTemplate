@@ -1,5 +1,5 @@
-# PHPTemplating
-Make it simple view loader with PHPTemplating.
+# PHPTemplate
+Make it simple view loader with PHPTemplate.
 
 ## How to use
 ---
@@ -12,10 +12,10 @@ $PHPTemplate->view(String template_path, String content_path, Array data);
 ## Example
 ---
 Example folder :
-* example
-  * content
+* \ example
+  * \ content
     * content.php
-  * template
+  * \ template
     * template.php
 ```PHP
 $PHPTemplate = new PHPTemplate('./example');
