@@ -1,15 +1,17 @@
-<div class="container text-center d-flex flex-column justify-content-center">
+<div class="mt-auto">
   <h1>Content Example</h1>
-  <p><?php echo $description; ?></p>
   <p>
 
-    <!-- 
-      COMPONENT -------------------------------------
-     -->
-    <?php $this->load_component("component/component"); ?>
-    <!-- 
-      -----------------------------------------------
-     -->
+    <!-- |==   Data [description]   ======================| -->
+      <?php echo $description; ?>
+    <!-- |================================================| -->
+  
+  </p>
+  <p>
+
+    <!-- |==   Component   ===============================| -->
+      <?php $this->load_component("component/component"); ?>
+    <!-- |================================================| -->
 
   </p>
 </div>
