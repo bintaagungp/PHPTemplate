@@ -73,8 +73,8 @@ template.php :
 First, you need to require PHPTemplate, add some code like this :
 ```php
 require(__DIR__."/Autoload.php");
-
 ```
+---
 Get the instance of PHPTemplate :
 ```php
 $PHPTemplate = new PHPTemplate(__DIR__.'/example');
