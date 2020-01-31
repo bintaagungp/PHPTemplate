@@ -1,12 +1,14 @@
 <?php
     
-    class PHPTemplate implements View {
+    class PHPTemplate implements View, Data {
 
         private $dir;
         private $dir_template;
         private $dir_content;
+        private $dir_component;
         private $template;
         private $content;
+        private $component;
         private $data;
 
         public function __construct($viewDir = APPPATH) {
@@ -18,25 +20,36 @@
             $this->dir = $viewDir;
         }
         
-        public function view($template = null, $content = null, $data = null) {
+        public function view($template = null, $content = null, $component = null, $data = null) {
             
-            if ( !empty($template) ) $this->dir_template = $template;
-            if ( !empty($content) ) $this->dir_content = $content;
-            if ( !empty($data) ) $this->data = $data;
+            if ( !empty($template) ) $this->template($template);
+            if ( !empty($content) ) $this->content($content);
+            if ( !empty($data) ) $this->data($data);
+            if ( !empty($component) ) $this->component($component);
             
-            $this->load_content($this->dir_content, 'content');
-            $this->load_content($this->dir_template, 'template');
-
+            $this->load([
+                'component' => $this->dir_component,
+                'content' => $this->dir_content, 
+                'template' => $this->dir_template
+            ]);
+            
             echo $this->template;
         }
 
         public function template($directTemplate) {
-            $this->template = $directTemplate;
+            $this->dir_template = $directTemplate;
             return $this;
         }
         
         public function content($directContent) {
-            $this->content = $directContent;
+            $this->dir_content = $directContent;
+            return $this;
+        }
+
+        public function component(...$directComponent) {
+            foreach ( $directComponent as $dirCom ) {
+                $this->dir_component[] = $dirCom;
+            }
             return $this;
         }
 
@@ -45,35 +58,49 @@
             return $this;
         }
 
-        public function load() {
+        public function load_content() {
             echo $this->content;
         }
+
+        public function load_component($component) {
+            echo $this->component[$component];
+        }
         
-        private function load_content($view, $type) {
+        private function load($view) {
             
             if ( !empty($this->data) ) {
                 foreach ($this->data as $key => $value) {
-                    if ( !is_array($value) ) {
-                        $value = '"'. $value . '"';
-                        $data = $value;
-                    } else {
-                        $value = json_encode($value);
-                        $data = 'json_decode($value)';
-                    };
+                    $data = json_encode($value);
+                    $d = 'json_decode($data)';
+                    eval('$'.$key.' = '.$d.';');
                 }
-                eval('$'.$key.' = '.$data.';');
             }
 
-            ob_start();
-            echo eval('require_once($this->dir.$view.\'.php\');');
-            if ( $type == "template" ) {
-                $this->template .= ob_get_contents();
-            } else if ( $type == "content" ) {
-                $this->content .= ob_get_contents();
+            foreach ($view as $value) {
+                if ( !empty($value) ) {
+                    ob_start();
+                    switch ($value) {
+                        case $this->dir_template:
+                            eval('require_once($this->dir.$value.\'.php\');');
+                            $this->template .= ob_get_contents();
+                        break;
+                        
+                        case $this->dir_content:
+                            eval('require_once($this->dir.$value.\'.php\');');
+                            $this->content .= ob_get_contents();
+                        break;
+                        
+                        case $this->dir_component:
+                            foreach( $value as $v ) {
+                                eval('require_once($this->dir.$v.\'.php\');');
+                                $this->component[$v] = ob_get_contents();
+                            }
+                    }
+                    ob_get_clean();
+                }
             }
-            ob_get_clean();
+            
             return $this;
-
         }
 
     }

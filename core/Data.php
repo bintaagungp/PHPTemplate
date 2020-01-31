@@ -1,6 +1,6 @@
 <?php
     
     interface Data {
-        public function data();
+        public function data($data);
     }
     
