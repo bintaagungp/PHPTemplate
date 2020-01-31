@@ -11,6 +11,7 @@
         }
         .container {
             height: 100vh;
+            max-width: 600px;
         }
     </style>
     <title>PHPTemplate | example</title>
