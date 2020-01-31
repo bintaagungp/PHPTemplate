@@ -33,7 +33,7 @@ component.php :
 ```
 content.php :
 ```html
-<div class="container text-center d-flex flex-column justify-content-center" style="max-width: 600px">
+<div class="container text-center d-flex flex-column justify-content-center">
   <h1>Content Example</h1>
   <p><?php echo $description; ?></p>
   <p>
@@ -58,6 +58,7 @@ template.php :
         }
         .container {
             height: 100vh;
+            max-width: 600px
         }
     </style>
     <title>PHPTemplate | example</title>
