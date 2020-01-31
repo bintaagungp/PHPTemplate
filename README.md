@@ -5,7 +5,7 @@ Make it simple view loader with PHPTemplate.
 ---
 Declare something like this :
 ```PHP
-require(__DIR__."/core/Loader.php");
+require(__DIR__."/Autoload.php");
 
 $data = new PHPTemplate(String view_directory);
 
@@ -72,7 +72,7 @@ template.php :
 ---
 First, you need to require PHPTemplate, add some code like this :
 ```php
-require(__DIR__."/core/Loader.php");
+require(__DIR__."/Autoload.php");
 
 ```
 Get the instance of PHPTemplate :
