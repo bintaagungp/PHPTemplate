@@ -2,7 +2,7 @@
     
     require_once(__DIR__."\\autoload.php");
 
-    $PHPTemplate = new PHPTempate;
+    $PHPTemplate = new PHPTemplate;
 
     $PHPTemplate->template("template/template");
     $PHPTemplate->content("content/content");
