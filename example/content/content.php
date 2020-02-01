@@ -1,4 +1,4 @@
-<div class="mt-auto">
+<div class="mar-top-auto">
   <h1>Content Example</h1>
   <p>
 

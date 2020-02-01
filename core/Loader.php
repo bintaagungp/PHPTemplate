@@ -2,6 +2,8 @@
 
     require_once("Constant.php");
 
-    spl_autoload_register(function( $c ) {
-        require_once($c . ".php");
+    $data = spl_autoload_register(function( $class ) {
+        if ( $class == "PHPTemplate" ) {
+            require_once($class . ".php");
+        }
     });

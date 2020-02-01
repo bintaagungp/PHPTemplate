@@ -1,4 +1,4 @@
 
 <!-- |==   Component [button]   ===============================| -->
-<button type="button" class="btn btn-outline-secondary">This is component</button>
+<button type="button" class="btn">This is component</button>
 <!-- |=========================================================| -->
