@@ -88,18 +88,18 @@
                     ob_start();
                     switch ($value) {
                         case $this->view->dir_template:
-                            eval('require_once($this->defaultDir.$value.\'.php\');');
+                            require_once($this->defaultDir.$value.'.php');
                             $this->template .= ob_get_contents();
                         break;
                         
                         case $this->view->dir_content:
-                            eval('require_once($this->defaultDir.$value.\'.php\');');
+                            require_once($this->defaultDir.$value.'.php');
                             $this->content .= ob_get_contents();
                         break;
                         
                         case $this->view->dir_component:
                             foreach( $value as $v ) {
-                                eval('require_once($this->defaultDir.$v.\'.php\');');
+                                require_once($this->defaultDir.$v.'.php');
                                 $this->component[$v] = ob_get_contents();
                             }
                     }
