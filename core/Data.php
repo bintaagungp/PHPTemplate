@@ -1,6 +1,7 @@
 <?php
     
-    interface Data {
-        public function data($data);
+    class Data {
+        public $data;
+
     }
     

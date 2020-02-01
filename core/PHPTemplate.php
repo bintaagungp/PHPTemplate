@@ -4,7 +4,6 @@
 
         private $defaultDir;
         private $view;
-        // private $data;
         
         private $template;
         private $content;
@@ -70,6 +69,7 @@
         }
 
         public function load_component($component) {
+            $component = str_replace('/', '\\', $component);
             echo $this->component[$component];
         }
         
