@@ -2,24 +2,24 @@
     
     class PHPTemplate {
 
-        private $defaultDir;
-        private $view;
-        
-        private $template;
-        private $content;
-        private $component;
+        private $dir_view;
+        private $dir_template;
+        private $dir_content;
+        private $dir_component;
+        private $view_template;
+        private $view_content;
+        private $view_component;
         private $data;
 
-        public function __construct($viewDir = BASEDIR . '\\example\\') {
 
-            if ( !is_string($viewDir) ) {
+
+        public function __construct($base_view_dir = BASEDIR . '\\example\\') {
+
+            if ( !is_string($base_view_dir) ) {
                 throw new Exception("Value must be String!");
             }
 
-            $this->defaultDir = $viewDir;
-
-            require_once(BASEDIR."\core\View.php");
-            $this->view = new View;
+            $this->dir_view = $base_view_dir;
 
         }
         
@@ -31,26 +31,27 @@
             if ( !empty($component) ) $this->component($component);
             
             $this->load([
-                'component' => $this->view->dir_component,
-                'content' => $this->view->dir_content, 
-                'template' => $this->view->dir_template
+                'component' => $this->dir_component,
+                'content' => $this->dir_content, 
+                'template' => $this->dir_template
             ])->load_template();
             
         }
 
         public function template($directTemplate) {
-            $this->view->template($directTemplate);
+            $this->dir_template = $this->trim_view($directTemplate);
             return $this;
         }
         
         public function content($directContent) {
-            $this->view->content($directContent);
+            $this->dir_content = $this->trim_view($directContent);
             return $this;
         }
 
         public function component(...$directComponent) {
             foreach ( $directComponent as $dirCom ) {
-                $this->view->component($dirCom);
+                $com = $this->trim_view($dirCom);
+                $this->dir_component[$com] = $com;
             }
             return $this;
         }
@@ -61,53 +62,56 @@
         }
 
         public function load_template() {
-            echo $this->template;
+            echo $this->view_template;
         }
 
         public function load_content() {
-            echo $this->content;
+            echo $this->view_content;
         }
 
         public function load_component($component) {
-            $component = str_replace('/', '\\', $component);
-            echo $this->component[$component];
+            $com = $this->trim_view($component);
+            echo $this->view_component[$com];
         }
         
         private function load($view) {
             
             if ( !empty($this->data) ) {
-                foreach ($this->data as $key => $value) {
-                    $data = json_encode($value);
-                    $d = 'json_decode($data)';
-                    eval('$'.$key.' = '.$d.';');
-                }
+                extract($this->data);
             }
 
             foreach ($view as $value) {
                 if ( !empty($value) ) {
                     ob_start();
                     switch ($value) {
-                        case $this->view->dir_template:
-                            require_once($this->defaultDir.$value.'.php');
-                            $this->template .= ob_get_contents();
+                        case $this->dir_template:
+                            require_once($this->dir_view.$value.'.php');
+                            $this->view_template .= ob_get_contents();
                         break;
                         
-                        case $this->view->dir_content:
-                            require_once($this->defaultDir.$value.'.php');
-                            $this->content .= ob_get_contents();
+                        case $this->dir_content:
+                            require_once($this->dir_view.$value.'.php');
+                            $this->view_content .= ob_get_contents();
                         break;
                         
-                        case $this->view->dir_component:
+                        case $this->dir_component:
                             foreach( $value as $v ) {
-                                require_once($this->defaultDir.$v.'.php');
-                                $this->component[$v] = ob_get_contents();
+                                require_once($this->dir_view.$v.'.php');
+                                $this->view_component[$v] = ob_get_contents();
                             }
                     }
                     ob_get_clean();
                 }
             }
-            
+
             return $this;
+            
+        }
+
+        private function trim_view($dir) {
+            $dir = trim($dir);
+            $dir = str_replace('/', '\\', $dir);
+            return $dir;
         }
 
     }
