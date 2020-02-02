@@ -6,9 +6,11 @@
         private $dir_template;
         private $dir_content;
         private $dir_component;
+
         private $view_template;
         private $view_content;
         private $view_component;
+        
         private $data;
 
 
@@ -81,22 +83,23 @@
             }
 
             foreach ($view as $value) {
+
                 if ( !empty($value) ) {
                     ob_start();
                     switch ($value) {
                         case $this->dir_template:
-                            require_once($this->dir_view.$value.'.php');
+                            require_once($this->view_exist($value));
                             $this->view_template .= ob_get_contents();
                         break;
                         
                         case $this->dir_content:
-                            require_once($this->dir_view.$value.'.php');
+                            require_once($this->view_exist($value));
                             $this->view_content .= ob_get_contents();
                         break;
                         
                         case $this->dir_component:
                             foreach( $value as $v ) {
-                                require_once($this->dir_view.$v.'.php');
+                                require_once($this->view_exist($v));
                                 $this->view_component[$v] = ob_get_contents();
                             }
                     }
@@ -106,6 +109,13 @@
 
             return $this;
             
+        }
+
+        private function view_exist($path) {
+            $view_path = $this->dir_view . $path . '.php';
+            if ( file_exists($view_path) ) {
+                return $view_path;
+            }
         }
 
         private function trim_view($dir) {
