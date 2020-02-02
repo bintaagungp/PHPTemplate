@@ -21,6 +21,29 @@
                 throw new Exception("Value must be String!");
             }
 
+            $example_dir = array_slice(scandir($base_view_dir), 2);
+
+            foreach ($example_dir as $value) {
+                if ( is_dir($base_view_dir . "\\$value") ) {
+                    switch ($value) {
+                        case "template":
+                            $this->template( $value . "\\template" );
+                        break;
+                        
+                        case "content":
+                            $this->content( $value . "\\content" );
+                        break;
+
+                        case "component":
+                            $this->component( $value . "\\component" );
+                        break;
+                        
+                    }
+                }
+            }
+
+            $this->data = ['description' => 'This is example that i make to entertain you how to understand the flow of PHPTemplate. Make it easier with PHPTemplate. Enjoy :)'];
+
             $this->dir_view = $base_view_dir;
 
         }
